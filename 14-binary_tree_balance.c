@@ -1,45 +1,42 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_balance - measure the balance factor of a binary tree
- * @tree: pointer to root node of tree to measure
- * Return: balance factor left height minus right height, or 0 if tree is NULL
+ * binary_tree_height - measures the height of a binary tree
+ * @tree: a pointer to the root node of the tree to measure the height.
+ * Return: height of a binary tree or 0 if tree is null.
  */
-int binary_tree_balance(const binary_tree_t *tree)
+size_t binary_tree_height(const binary_tree_t *tree)
 {
-	int left, right;
+	size_t left_height = 0, right_height = 0;
 
-	if (tree == NULL)
+	if (!tree || (!tree->left && !tree->right))
+	{
 		return (0);
+	}
+	left_height = binary_tree_height(tree->left);
+	right_height = binary_tree_height(tree->right);
 
-	left = custom_binary_tree_height(tree->left);
-	right = custom_binary_tree_height(tree->right);
-
-	return (left - right);
+	if (left_height < right_height)
+	{
+		return (right_height + 1);
+	}
+	return (left_height + 1);
 }
 
 /**
- * custom_binary_tree_height - Measure the height
- * of a binary tree from a given node
- * @tree: pointer to node of tree to measure
- * Description: Edited to work with balance factor function
- * Return: height of tree or -1 if NULL
- */
-int custom_binary_tree_height(const binary_tree_t *tree)
+ * binary_tree_balance - measures the balance factor of a binary tree.
+ * @tree: Pointer to the root node of the tree to measure the balance factor.
+ * Return: 0 if tree don't exist.
+ **/
+int binary_tree_balance(const binary_tree_t *tree)
 {
-	int left, right;
+	int l, r;
 
-	if (tree == NULL)
-		return (-1);
-
-	if (tree->left == NULL && tree->right == NULL)
+	if (!tree)
 		return (0);
 
-	left = custom_binary_tree_height(tree->left) + 1;
-	right = custom_binary_tree_height(tree->right) + 1;
+	l = (tree->left) ? (int)binary_tree_height(tree->left) : -1;
+	r = (tree->right) ? (int)binary_tree_height(tree->right) : -1;
 
-	if (left > right)
-		return (left);
-	else
-		return (right);
+	return (l - r);
 }
